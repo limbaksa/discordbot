@@ -41,18 +41,19 @@ class Bot(BotBase):
             print("bot reconnected")
         
     async def on_message(self,message):
-        if message.author == 751008755185090570:
-            return
-
-        if message.content == 'hello there':
-            await message.channel.send('general kenobi')
-        
-        if message.author != 751008755185090570:
-            if message.author != 679973416216035368:
-                name = str(message.author)
-                logfile = open( 'C:/Users/andyp/OneDrive/바탕 화면/discordbot/discordbot/lib/db/discordlog.txt' , 'a' )
-                logfile.write('\n'+ message.content + "-" + name )
-                logfile.close()
+        if message.guild == self.guild:
+            if message.author == 751008755185090570:
+                return
+    
+            if message.content == 'hello there':
+                await message.channel.send('general kenobi')
+            
+            if message.author != 751008755185090570:
+                if message.author != 679973416216035368 and message.author != 485112161367097367:
+                    name = str(message.author)
+                    logfile = open( 'C:/Users/andyp/OneDrive/바탕 화면/discordbot/discordbot/lib/db/discordlog.txt' , 'a' )
+                    logfile.write('\n'+ message.content + "-" + name )
+                    logfile.close()
 
 
 
