@@ -1,4 +1,5 @@
 from discord import Intents
+from discord import Embed
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from discord.ext.commands import Bot as BotBase
 
@@ -33,13 +34,26 @@ class Bot(BotBase):
     async def on_ready(self):
         if not self.ready:
             self.ready=True
-            self.guild=self.guild(742916227986620573)
+            self.guild=self.get_guild(742916227986620573)
             print("bot ready")
+
         else:
             print("bot reconnected")
         
     async def on_message(self,message):
-        pass
+        if message.author == 751008755185090570:
+            return
+
+        if message.content == 'hello there':
+            await message.channel.send('general kenobi')
+        
+        if message.author != 751008755185090570:
+            if message.author != 679973416216035368:
+                name = str(message.author)
+                logfile = open( 'C:/Users/andyp/OneDrive/바탕 화면/discordbot/discordbot/lib/db/discordlog.txt' , 'a' )
+                logfile.write('\n'+ message.content + "-" + name )
+                logfile.close()
+
 
 
 bot=Bot()
