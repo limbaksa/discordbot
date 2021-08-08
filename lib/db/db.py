@@ -1,10 +1,11 @@
 from os.path import isfile
 from sqlite3 import connect
 
+from apscheduler.triggers.cron import CronTrigger
 DB_PATH="./data/db/database.db"
 BUILD_PATH="./data/db/build.sql"
 
-cxn=connect(DB_PATH,connect_same_thread=False)
+cxn=connect(DB_PATH,check_same_thread=False)
 cur=cxn.cursor()
 
 
@@ -25,6 +26,8 @@ def build():
 def commit():
     cxn.commit()
 
+def autosave(sched):
+    sched.add_job(commit,CronTrigger(second=0))
 
 def close():
     cxn.close()
