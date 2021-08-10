@@ -29,7 +29,7 @@ class Bot(BotBase):
         super().run(self.TOKEN,reconnect=True)
 
     async def print_message(self):
-        await testchannel.send("오늘은 밤새 가동되려나보네요")
+        await self.testchannel.send("오늘은 밤새 가동되려나보네요")
     async def on_connect(self):
         print("bot connected!")
     
@@ -44,7 +44,7 @@ class Bot(BotBase):
 
 
     async def on_command_error(self,ctx,exc):
-        if isinstance(exc, CommandsNotFound):
+        if isinstance(exc, CommandNotFound):
             pass
         elif hasattr(exec,"original"):
             raise exc.original
