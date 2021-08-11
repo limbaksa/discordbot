@@ -1,6 +1,5 @@
 from asyncio import sleep
-from discord import Intents
-from discord import Embed
+from discord import *
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from apscheduler.triggers.cron import CronTrigger
 from discord.ext.commands import Bot as BotBase
@@ -8,11 +7,11 @@ from discord.ext.commands import CommandNotFound
 from glob import glob
 
 from ..db import db
-PREFIX = "+"
+PREFIX = "/"
 OWNER_IDS=[528074180814438434]
 COGS=[path.split("\\")[-1][:-3] for path in glob("./lib/cogs/*.py")]
 
-class Ready(object):
+class Ready():
     def __init__(self):
         for cog in COGS:
             setattr(self,cog,False)
@@ -85,7 +84,8 @@ class Bot(BotBase):
             print("bot reconnected")
         
     async def on_message(self,message):
-        
+        emojilist=self.emojis
+        await self.process_commands(message)
         if message.author == 751008755185090570:
             return
         if message.content == 'hello there':
@@ -94,11 +94,10 @@ class Bot(BotBase):
             if message.author != 751008755185090570:
                 if message.author != 679973416216035368 and message.author != 485112161367097367:
                     name = str(message.author)
-                    logfile = open( 'C:/Users/andyp/OneDrive/바탕 화면/discordbot/discordbot/lib/db/discordlog.txt' , 'a' )
+                    logfile = open( 'C:/Users/andyp/OneDrive/바탕 화면/discordbot/discordbot/lib/db/discordlog.txt' , 'a' ,encoding="UTF-8" )
                     logfile.write('\n'+ message.content + "-" + name )
                     logfile.close()
-        else:
-            pass
+
 
 
 
