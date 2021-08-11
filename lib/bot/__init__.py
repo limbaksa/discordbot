@@ -1,27 +1,46 @@
+from asyncio import sleep
 from discord import Intents
 from discord import Embed
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from apscheduler.triggers.cron import CronTrigger
 from discord.ext.commands import Bot as BotBase
 from discord.ext.commands import CommandNotFound
+from glob import glob
 
 from ..db import db
 PREFIX = "+"
 OWNER_IDS=[528074180814438434]
+COGS=[path.split("\\")[-1][:-3] for path in glob("./lib/cogs/*.py")]
 
-
+class Ready(object):
+    def __init__(self):
+        for cog in COGS:
+            setattr(self,cog,False)
+    def ready_up(self,cog):
+        setattr(self,cog,True)
+        print(f"{cog} cog ready")
+    def all_ready(self):
+        return all([getattr(self,cog) for cog in COGS])
 class Bot(BotBase):
     def __init__(self):
         self.PREFIX=PREFIX
         self.ready=False
+        self.cogs_ready=Ready()
         self.guild=None
         self.scheduler=AsyncIOScheduler()
         db.autosave(self.scheduler)
         super().__init__(command_prefix=PREFIX,owner_ids=OWNER_IDS,intents=Intents.all())
-        
+
+    def setup(self):
+        for cog in COGS:
+            self.load_extension(f"lib.cogs.{cog}")
+            print(f"{cog} cog loaded")
+        print("setup complete")
+
     def run(self,version):
         self.VERSION=version
-
+        print("running setup")
+        self.setup()
         with open("./lib/bot/token.0","r",encoding="utf-8") as tf:
             self.TOKEN=tf.read()
         
@@ -38,7 +57,7 @@ class Bot(BotBase):
 
     async def on_error(self,err,*args,**kwargs):
         if err == "on_command_error":
-            await args[0].send("something went wrong.")
+            await args[0].send("뭔가 잘못됨")
 
         raise
 
@@ -53,11 +72,13 @@ class Bot(BotBase):
 
     async def on_ready(self):
         if not self.ready:
-            self.ready=True
             self.guild=self.get_guild(742916227986620573)
             self.testchannel=self.get_channel(777004746799054899)
             self.scheduler.add_job(self.print_message,CronTrigger(hour=4,minute=0,second=0)) #KST (GMT+9)
             self.scheduler.start()
+            while not self.cogs_ready.all_ready():
+                await sleep(0.5)
+            self.ready=True
             print("bot ready")
 
         else:
