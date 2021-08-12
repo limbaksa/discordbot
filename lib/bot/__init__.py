@@ -7,7 +7,7 @@ from discord.ext.commands import CommandNotFound
 from glob import glob
 
 from ..db import db
-PREFIX = "/"
+PREFIX = "!"
 OWNER_IDS=[528074180814438434]
 COGS=[path.split("\\")[-1][:-3] for path in glob("./lib/cogs/*.py")]
 
@@ -73,6 +73,7 @@ class Bot(BotBase):
         if not self.ready:
             self.guild=self.get_guild(742916227986620573)
             self.testchannel=self.get_channel(777004746799054899)
+            self.warnchannel=self.get_channel(742920350735794316)
             self.scheduler.add_job(self.print_message,CronTrigger(hour=4,minute=0,second=0)) #KST (GMT+9)
             self.scheduler.start()
             while not self.cogs_ready.all_ready():
