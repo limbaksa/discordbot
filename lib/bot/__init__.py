@@ -2,15 +2,21 @@ from asyncio import sleep
 from discord import *
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from apscheduler.triggers.cron import CronTrigger
-from discord.ext.commands import Bot as BotBase
-from discord.ext.commands import CommandNotFound
+from discord.ext.commands import *
 from glob import glob
 
 from ..db import db
 PREFIX = "!"
 OWNER_IDS=[528074180814438434]
 COGS=[path.split("\\")[-1][:-3] for path in glob("./lib/cogs/*.py")]
-
+IGNORE_EXCEPTIONS=(CommandNotFound,BadArgument)
+def cooldowntype(type):
+    if type=="user":
+        return "유저"
+    elif type=="guild":
+        return "서버"
+    else:
+        return "Unknown"
 class Ready():
     def __init__(self):
         for cog in COGS:
@@ -20,7 +26,7 @@ class Ready():
         print(f"{cog} cog ready")
     def all_ready(self):
         return all([getattr(self,cog) for cog in COGS])
-class Bot(BotBase):
+class Bot(Bot):
     def __init__(self):
         self.PREFIX=PREFIX
         self.ready=False
@@ -62,10 +68,17 @@ class Bot(BotBase):
 
 
     async def on_command_error(self,ctx,exc):
-        if isinstance(exc, CommandNotFound):
+        if any([isinstance(exc,error) for error in IGNORE_EXCEPTIONS]):
             pass
-        elif hasattr(exec,"original"):
-            raise exc.original
+        elif isinstance(exc,MissingRequiredArgument):
+            await ctx.send("뭔가 빼먹으신듯?")
+        elif isinstance(exc,CommandOnCooldown):
+            await ctx.send(f"{cooldowntype(str(exc.cooldown.type).split('.')[-1])} 쿨다운에 걸려있는 명령어입니다. {exc.retry_after:,.2f}초만 기다려주세요.")
+        elif hasattr(exc,"original"):
+            if isinstance(exc.original,Forbidden):
+                await ctx.send("권한이 없습니다.")
+            else:
+                raise(exc.original)
         else:
             raise exc
 

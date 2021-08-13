@@ -21,6 +21,7 @@ class testcog(Cog):
     def __init__(self,bot):
         self.bot = bot
     @command(name="hello",aliases=["hi"])
+    @cooldown(1,10,BucketType.user)
     async def hello(self,ctx):
         cur=mornin()
         if cur==0:
