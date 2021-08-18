@@ -53,7 +53,9 @@ class Bot(Bot):
         super().run(self.TOKEN,reconnect=True)
 
     async def print_message(self):
-        await self.testchannel.send("오늘은 밤새 가동되려나보네요")
+        await self.testchannel.send("로그 삭제중...")
+        f=open('C:/Users/andyp/OneDrive/바탕 화면/discordbot/discordbot/lib/db/discordlog.txt' , 'w' ,encoding="UTF-8" )
+        f.close()
     async def on_connect(self):
         print("bot connected!")
     
@@ -84,10 +86,11 @@ class Bot(Bot):
 
     async def on_ready(self):
         if not self.ready:
+            self.testbot=self.get_user(751008755185090570)
             self.guild=self.get_guild(742916227986620573)
             self.testchannel=self.get_channel(777004746799054899)
             self.warnchannel=self.get_channel(742920350735794316)
-            self.scheduler.add_job(self.print_message,CronTrigger(hour=4,minute=0,second=0)) #KST (GMT+9)
+            self.scheduler.add_job(self.print_message,CronTrigger(week="*/2",day_of_week=0,hour=0,minute=0,second=0)) #KST (GMT+9)
             self.scheduler.start()
             while not self.cogs_ready.all_ready():
                 await sleep(0.5)
@@ -100,13 +103,13 @@ class Bot(Bot):
     async def on_message(self,message):
         emojilist=self.emojis
         await self.process_commands(message)
-        if message.author == 751008755185090570:
+        if message.author == self.testbot:
             return
         if message.content == 'hello there':
             await message.channel.send('general kenobi')
         if message.guild == self.guild:    
-            if message.author != 751008755185090570:
-                if message.author != 679973416216035368 and message.author != 485112161367097367:
+            if message.author != self.testbot:
+                if str(message.author) != '코로나19 알림봇#4394' and str(message.author) != 'Space Launch Bot#3646':
                     name = str(message.author)
                     logfile = open( 'C:/Users/andyp/OneDrive/바탕 화면/discordbot/discordbot/lib/db/discordlog.txt' , 'a' ,encoding="UTF-8" )
                     logfile.write('\n'+ message.content + "-" + name )
