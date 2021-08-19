@@ -22,12 +22,13 @@ class HelpMenu(ListPageSource):
     async def write_page(self,menu,fields=[]):
         offset=(menu.current_page*self.per_page)+1
         len_data=len(self.entries)
-        embed = Embed(title="도움말",description="도움말 목록",color=self.ctx.author.color)
+        embed = Embed(title="도움말",description="도움말 목록",colour=self.ctx.author.colour)
         embed.set_thumbnail(url=self.ctx.guild.me.avatar_url)
         embed.set_footer(text=f"전체 {len_data:,}개 중 {offset:,} - {min(len_data,offset+self.per_page-1):,}번째 명령어")
 
         for name,value in fields:
             embed.add_field(name=name,value=value,inline=False)
+        return embed
 
 
     async def format_page(self,menu,entries):
