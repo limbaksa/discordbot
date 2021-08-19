@@ -6,7 +6,7 @@ from discord.ext.commands import *
 from glob import glob
 
 from ..db import db
-PREFIX = "!"
+PREFIX = ";"
 OWNER_IDS=[528074180814438434]
 COGS=[path.split("\\")[-1][:-3] for path in glob("./lib/cogs/*.py")]
 IGNORE_EXCEPTIONS=(CommandNotFound,BadArgument)

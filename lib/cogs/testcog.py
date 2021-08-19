@@ -20,7 +20,7 @@ def mornin():
 class testcog(Cog):
     def __init__(self,bot):
         self.bot = bot
-    @command(name="hello",aliases=["hi"])
+    @command(name="hello",aliases=["hi"],help="인사를 해줍니다")
     @cooldown(1,10,BucketType.user)
     async def hello(self,ctx):
         cur=mornin()
@@ -36,7 +36,7 @@ class testcog(Cog):
             asdf="좋은 하루 보내셨나요?"
         await ctx.send(f"{ctx.author.mention}님 {choice(('안녕하세요!',asdf))}")
 
-    @command(name="mute")
+    @command(name="mute",help="나쁜 사람을 위한 뮤트. 박사만 사용가능.")
     async def mute(self, ctx, member: Member, length:int, *, reason: Optional[str]):
         roleidlist=[i.id for i in ctx.author.roles]
         if 875218121219268660 in roleidlist:
