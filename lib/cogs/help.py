@@ -3,6 +3,7 @@ from discord.ext.menus import MenuPages, ListPageSource
 from discord.utils import *
 from discord import *
 from typing import Optional
+import time
 
 def syntax(command):
     cmd_and_aliases="|".join([str(command), *command.aliases])
@@ -13,11 +14,12 @@ def syntax(command):
     params=" ".join(params)
     return f"```;{cmd_and_aliases} {params}```"
 
+
 class HelpMenu(ListPageSource):
     def __init__(self,ctx,data):
         self.ctx=ctx
         
-        super().__init__(data,per_page=3)
+        super().__init__(data,per_page=2)
 
     async def write_page(self,menu,fields=[]):
         offset=(menu.current_page*self.per_page)+1
@@ -46,12 +48,13 @@ class Help(Cog):
         embed=Embed(title=f"`{command}` 명령어 사용법",description=f"사용법{syntax(command)}",color=ctx.author.color)
         embed.add_field(name="설명",value=command.help)
 
-        await ctx.send(embed=embed)
-    @command(name="help",help="이걸 왜")
+        message=await ctx.send(embed=embed)
+
+    @command(name="help",help="이걸 왜",brief="도움말")
     async def show_help(self,ctx,cmd:Optional[str]):
         if cmd is None:
-            menu=MenuPages(source=HelpMenu(ctx,list(self.bot.commands)),clear_reactions_after=True,delete_message_after=True,timeout=60.0)
-            await menu.start(ctx)
+            menu=MenuPages(source=HelpMenu(ctx,list(self.bot.commands)),clear_reactions_after=False,delete_message_after=False,timeout=100.0)
+            menupage=await menu.start(ctx)
         else:
             if command:=get(self.bot.commands,name=cmd):
                 await self.cmd_help(ctx,command)
