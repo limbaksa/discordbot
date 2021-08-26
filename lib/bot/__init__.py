@@ -4,7 +4,9 @@ from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from apscheduler.triggers.cron import CronTrigger
 from discord.ext.commands import *
 from glob import glob
-
+import sys
+sys.path.append("C:/Users/andyp/OneDrive/바탕 화면/discordbot/discordbot/data/db")
+import db
 PREFIX = ";"
 OWNER_IDS=[528074180814438434]
 COGS=[path.split("\\")[-1][:-3] for path in glob("./lib/cogs/*.py")]
@@ -59,6 +61,9 @@ class Bot(Bot):
     
     async def on_disconnect(self):
         print("bot disconnected!")
+    
+    async def on_member_join(self,member):
+        db.newuser(member.id)
 
     async def on_error(self,err,*args,**kwargs):
         if err == "on_command_error":
@@ -90,6 +95,7 @@ class Bot(Bot):
             self.warnchannel=self.get_channel(742920350735794316)
             self.scheduler.add_job(self.delete_log,CronTrigger(week="*/2",day_of_week=0,hour=0,minute=0,second=0)) #KST (GMT+9)
             self.scheduler.start()
+            db.makedb()
             while not self.cogs_ready.all_ready():
                 await sleep(0.5)
             self.ready=True
