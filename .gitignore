@@ -2,4 +2,4 @@
 *.db-journal
 __pycache__
 lib/bot/token.0
-lib/db/discordlog.txt
+data/discordlog.txt
