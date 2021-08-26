@@ -19,8 +19,8 @@ def addwarn(userid):
         c=conn.cursor()
         c.execute(f"SELECT warns FROM warning WHERE userid={userid}")
         warn=c.fetchone()
-        warn+=1
-        c.execute(f"UPDATE warning SET warns={warn} WHERE userid={userid}")
+        newwarn=warn[0]+1
+        c.execute(f"UPDATE warning SET warns={newwarn} WHERE userid={userid}")
         conn.commit()
         conn.close()
-        return warn
+        return newwarn
