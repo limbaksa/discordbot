@@ -4,7 +4,7 @@ from discord import *
 from discord.utils import get
 from typing import Optional
 import sys
-sys.path.append("C:/Users/andyp/OneDrive/바탕 화면/discordbot/discordbot/data/db")
+sys.path.append("C:/pythonfile/discordbot/data/db")
 import db
 mutetime={1:3600,2:86400,3:999999999999999999999999999999999999999999999999999999}
 class admin(Cog):

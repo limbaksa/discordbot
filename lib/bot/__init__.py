@@ -5,7 +5,7 @@ from apscheduler.triggers.cron import CronTrigger
 from discord.ext.commands import *
 from glob import glob
 import sys
-sys.path.append("C:/Users/andyp/OneDrive/바탕 화면/discordbot/discordbot/data/db")
+sys.path.append("C:/pythonfile/discordbot/data/db")
 import db
 PREFIX = ";"
 OWNER_IDS=[528074180814438434]
@@ -54,7 +54,7 @@ class Bot(Bot):
 
     async def delete_log(self):
         await self.testchannel.send("로그 삭제중...")
-        f=open('C:/Users/andyp/OneDrive/바탕 화면/discordbot/discordbot/data/discordlog.txt' , 'w' ,encoding="UTF-8" )
+        f=open('C:/pythonfile/discordbot/data/discordlog.txt' , 'w' ,encoding="UTF-8" )
         f.close()
     async def on_connect(self):
         print("bot connected!")
@@ -115,7 +115,7 @@ class Bot(Bot):
             if message.author != self.testbot:
                 if str(message.author) != '코로나19 알림봇#4394' and str(message.author) != 'Space Launch Bot#3646':
                     name = str(message.author)
-                    logfile = open( 'C:/Users/andyp/OneDrive/바탕 화면/discordbot/discordbot/data/discordlog.txt' , 'a' ,encoding="UTF-8" )
+                    logfile = open( 'C:/pythonfile/discordbot/data/discordlog.txt' , 'a' ,encoding="UTF-8" )
                     logfile.write('\n'+ message.content + "-" + name )
                     logfile.close()
 
