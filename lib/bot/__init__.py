@@ -52,10 +52,6 @@ class Bot(Bot):
         print("running bot...")
         super().run(self.TOKEN,reconnect=True)
 
-    async def delete_log(self):
-        await self.testchannel.send("로그 삭제중...")
-        f=open('C:/pythonfile/discordbot/data/discordlog.txt' , 'w' ,encoding="UTF-8" )
-        f.close()
     async def on_connect(self):
         print("bot connected!")
     
@@ -93,9 +89,6 @@ class Bot(Bot):
             self.guild=self.get_guild(742916227986620573)
             self.testchannel=self.get_channel(777004746799054899)
             self.warnchannel=self.get_channel(742920350735794316)
-            self.scheduler.add_job(self.delete_log,CronTrigger(week="*/2",day_of_week=0,hour=0,minute=0,second=0)) #KST (GMT+9)
-            self.scheduler.start()
-            db.makedb()
             while not self.cogs_ready.all_ready():
                 await sleep(0.5)
             self.ready=True
@@ -111,15 +104,13 @@ class Bot(Bot):
             return
         if message.content == 'hello there':
             await message.channel.send('general kenobi')
+        if message.content == 'test_make_database':
+            db.makedb()
+            await message.channel.send('database is built')
         if message.guild == self.guild:    
             if message.author != self.testbot:
                 if str(message.author) != '코로나19 알림봇#4394' and str(message.author) != 'Space Launch Bot#3646':
-                    name = str(message.author)
-                    logfile = open( 'C:/pythonfile/discordbot/data/discordlog.txt' , 'a' ,encoding="UTF-8" )
-                    logfile.write('\n'+ message.content + "-" + name )
-                    logfile.close()
-
-
-
-
+                    userid = int(message.author.id)
+                    message=str(message.content.encode("UTF-8"))
+                    db.logging(userid, message)
 bot=Bot()
