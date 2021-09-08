@@ -111,6 +111,7 @@ class Bot(Bot):
             if message.author != self.testbot:
                 if str(message.author) != '코로나19 알림봇#4394' and str(message.author) != 'Space Launch Bot#3646':
                     userid = int(message.author.id)
-                    message=str(message.content.encode("UTF-8"))
-                    db.logging(userid, message)
+                    message=message.content.encode("UTF-8")
+                    decodedmessage=message.decode("UTF-8")
+                    db.logging(userid, decodedmessage)
 bot=Bot()

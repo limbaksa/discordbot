@@ -43,6 +43,7 @@ def logging(userid,message):
         int_messageid+=1
     else:
         int_messageid=0
+    c.execute(f"DELETE FROM discordlog WHERE messageid={int_messageid}")
     c.execute("INSERT INTO discordlog VALUES (?,?,?)",(int_messageid,userid,message))
     conn.commit()
     conn.close()
