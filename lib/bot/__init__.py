@@ -89,6 +89,7 @@ class Bot(Bot):
             self.guild=self.get_guild(742916227986620573)
             self.testchannel=self.get_channel(777004746799054899)
             self.warnchannel=self.get_channel(742920350735794316)
+            await client.change_presence(status=Status.online, activity=Game("채팅 지켜보기"))
             while not self.cogs_ready.all_ready():
                 await sleep(0.5)
             self.ready=True
